@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     var calcTemp1 = 0.0;
     var calcTemp2 = 0.0;
     
+    
+    
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!;
         print("\(digit) was touched");
@@ -45,97 +47,28 @@ class ViewController: UIViewController {
         }
     }
     
+    private var brain = CalculatorBrain();
+    
+    
     
     @IBAction func performOperation(_ sender: UIButton) {
-        inMiddleTyping = false;
-
+        
+        if (inMiddleTyping){
+            brain.setOperand(displayValue);
+            inMiddleTyping = false;
+        }
         
         // The part to handle operation symbols
         if let mathematicalSymbol = sender.currentTitle {
-            switch mathematicalSymbol{
-            case "π":
-                displayValue = Double.pi;
-                
-            case "√":
-                displayValue = sqrt(displayValue);
-                
-            case "+":
-                calcTemp1 = displayValue;
-                inMiddleTyping = false;
-                calcMode = "add";
-                
-            case "-":
-                calcTemp1 = displayValue;
-                inMiddleTyping = false;
-                calcMode = "subtract";
-                
-            case "*":
-                calcTemp1 = displayValue;
-                inMiddleTyping = false;
-                calcMode = "multiply";
-            
-            case "/":
-                calcTemp1 = displayValue;
-                inMiddleTyping = false;
-                calcMode = "division";
-                
-            case "^":
-                calcTemp1 = displayValue;
-                inMiddleTyping = false;
-                calcMode = "power";
-                
-                
-            case "=":
-                handle_result(mode: calcMode);
-                
-            case "C":
-                displayValue = 0;
-                calcTemp1 = 0;
-                calcTemp2 = 0;
-                calcMode = "";
-                
-                
-            default:
-                break;
-            }
-        
+            brain.performOperation(mathematicalSymbol);
         }
+        if let result = brain.result{
+            displayValue = result;}
+        
     }
     
-    // The part to handle the calculation result
-    func handle_result(mode:String?) {
-        switch mode{
-        case "add":
-            displayValue = displayValue + calcTemp1;
-            inMiddleTyping = false;
-            calcTemp1 = 0;
-            
-        case "subtract":
-            displayValue = displayValue - calcTemp1;
-            inMiddleTyping = false;
-            calcTemp1 = 0;
-            
-        case "multiply":
-            displayValue = displayValue * calcTemp1;
-            inMiddleTyping = false;
-            calcTemp1 = 0;
-            
-        case "division":
-            displayValue = displayValue / calcTemp1;
-            inMiddleTyping = false;
-            calcTemp1 = 0;
-            
-        case "power":
-            calcTemp2 = displayValue;
-            displayValue = pow(calcTemp1,calcTemp2);
-            inMiddleTyping = false;
-            calcTemp2 = 0;
-            calcTemp1 = 0;
-            
-        default:
-            break;
-        }
-    }
+    
+ 
     
     
     func add(add1:Double, add2:Double) -> Double {
